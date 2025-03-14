@@ -1,4 +1,15 @@
 import streamlit as st
+import streamlit.components.v1 as components
+
+# Inject meta tags
+meta_tags = """
+<meta name="description" content="Show random quotes">
+<title>Quotes App</title>
+<meta name="keywords" content="quotes, streamlit, search">
+<meta name="author" content="Ugur Saritepe">
+<meta name="google-site-verification" content="Qt7ni_QIPZUafqHNOthSSglMNqvZqoFJtbtb_2bqFHU" />
+"""
+components.html(meta_tags, height=0)
 import requests
 import random
 
