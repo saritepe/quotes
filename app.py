@@ -1,4 +1,12 @@
 import streamlit as st
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Get the API key from environment variables
+api_key = os.getenv("API_KEY")
 
 # Title of the app
 st.title("Quotes App")
