@@ -1,24 +1,57 @@
 import streamlit as st
-from dotenv import load_dotenv
-import os
+import requests
+import random
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Get the API key from environment variables
-api_key = os.getenv("API_KEY")
-
-# Title of the app
 st.title("Quotes App")
+st.write("Welcome to the Quotes App!")
 
-# Sample quotes
-quotes = [
-    "The best way to predict the future is to create it.",
-    "Life is 10% what happens to us and 90% how we react to it.",
-    "The only way to do great work is to love what you do.",
-    "Success is not the key to happiness. Happiness is the key to success."
-]
+# Fetch quotes from API
+response = requests.get("https://api.quotable.io/quotes?limit=100", verify=False)
+quotes = response.json()["results"]
 
-# Display quotes
-for quote in quotes:
-    st.write(f"\"{quote}\"")
+def get_random_quote():
+    return random.choice(quotes)
+
+# Display the quote
+if 'quote' not in st.session_state:
+    st.session_state.quote = get_random_quote()
+
+st.subheader("Random Quote")
+
+# UI Enhancements
+st.markdown(
+    """
+    <style>
+    .main {
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 10px;
+    }
+    .quote {
+        font-size: 24px;
+        font-style: italic;
+        color: #333;
+    }
+    .author {
+        font-size: 20px;
+        font-weight: bold;
+        color: #555;
+        text-align: right;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    f"""
+    <div class="main">
+        <p class="quote">"{st.session_state.quote['content']}"</p>
+        <p class="author">- {st.session_state.quote['author']}</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+if st.button("Show Another Quote"):
+    st.session_state.quote = get_random_quote()
